@@ -1,6 +1,8 @@
 if(process.env.NODE_env != "production"){
     require("dotenv").config();
 }
+
+const Listing = require("./models/listing.js")
 //console.log(process.env)
 
 const express = require("express");
@@ -13,7 +15,7 @@ const dbUrl = process.env.ATLASDB_URL;
 
 const methodOverride = require("method-override");
 const ejs_mate = require("ejs-mate");
-//const wrapAsync = require("./utils/wrapAsync.js");
+const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 //const Listing = require("./models/listing.js");
 
@@ -83,9 +85,6 @@ const sessionOptions = {
     }
 }
 
-// app.get("/" , (req, res) => {
-//     res.send(" hiii! I am the root")
-// })
 
 
 
@@ -132,12 +131,20 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res , next ) => {
+    res.locals.currUser = req.user || null;//stores the info of current user which is logged in
+
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currUser = req.user;//stores the info of current user which is logged in
     // console.log(res.locals);
     next();
 });
+
+// app.get("/" ,wrapAsync, async (req, res) => {
+//     res.send(" hiii! I am the root")
+//     // const allListings = await Listing.find({});
+//     // //console.log(res)
+//     // res.render("listings/index.ejs", {allListings})  
+// })
 
 // app.get("/demouser" ,async (req,res) => {
 //     let fakeUser  =new User({
@@ -149,6 +156,11 @@ app.use((req, res , next ) => {
 //     res.send(registeredUser);
 // })
 
+app.use("/", async(req,res) => {
+    const allListings = await Listing.find({});
+        //console.log(res)
+    res.render("listings/index.ejs", {allListings})  
+})
 
 //Express router
 app.use("/listings" , listingRouter);
