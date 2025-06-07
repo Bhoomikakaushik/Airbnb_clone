@@ -156,7 +156,7 @@ app.use((req, res , next ) => {
 //     res.send(registeredUser);
 // })
 
-app.use("/", async(req,res) => {
+app.get("/", async(req,res) => {
     const allListings = await Listing.find({});
         //console.log(res)
     res.render("listings/index.ejs", {allListings})  
