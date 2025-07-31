@@ -104,7 +104,7 @@ passport.use( new GoogleStrategy(
         // callbackURL: "http://localhost:8080/auth/google/callback",
         callbackURL: process.env.NODE_ENV === "production"
         ? process.env.GOOGLE_CALLBACK_URL_PROD // Use the production callback URL
-        : process.env.GOOGLE_CALLBACK_URL, // Use the environment variable for callback URL
+        : process.env.GOOGLE_CALLBACK_URL_DEV, // Use the environment variable for callback URL
     } ,
     async (accessToken , refreshToken , profile, done ) => {
         try {
