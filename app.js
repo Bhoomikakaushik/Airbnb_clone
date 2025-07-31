@@ -103,8 +103,8 @@ passport.use( new GoogleStrategy(
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         // callbackURL: "http://localhost:8080/auth/google/callback",
         callbackURL: process.env.NODE_ENV === "production"
-        ? "https://airbnb-clone-gbwk.onrender.com/auth/google/callback"
-        : "http://localhost:8080/auth/google/callback",
+        ? process.env.GOOGLE_CALLBACK_URL_PROD // Use the production callback URL
+        : process.env.GOOGLE_CALLBACK_URL, // Use the environment variable for callback URL
     } ,
     async (accessToken , refreshToken , profile, done ) => {
         try {
